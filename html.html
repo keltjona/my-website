@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keltiona Shpata</title>
+  <link rel="stylesheet" href="css.css" />
+  <!-- Add Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  
+  <!-- Hero section -->
+  <div class="hero">
+    <div class="name-block">
+      <h1 class="main-name">KELTJONA</h1>
+      <div class="styled-name">
+        <span class="s-script">S &nbsp</span>
+        <span class="last-name">HPATA</span>
+      </div>
+      <p class="subtext">
+        FREELANCE WEB DEVELOPER <span class="and">&</span> CYBER SECURITY STUDENT
+      </p>
+      
+      <!-- Removed Konami code hint from here -->
+       
+      <!-- add a picture of me --> 
+      <div class="image-container">
+        <img src="meatwbu.jpeg" alt="Keltjona Shpata" class="profile-image" />
+      </div>
+      <button class="learn-btn" onclick="document.querySelector('.about-me').scrollIntoView({behavior: 'smooth'})">LEARN MORE</button>
+    </div>
+  </div>
+
+  <!-- Pjesa e njeshave dhe zerove efekt -->
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+  
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  
+    const chars = "01";
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+  
+    function draw() {
+      ctx.fillStyle = "rgba(247, 199, 212, 0.08)"; // Transparent pink fade
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+      ctx.fillStyle = "#ffffff"; // White text
+      ctx.font = `${fontSize}px monospace`;
+  
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+  
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+  
+        drops[i]++;
+      }
+    }
+  
+    setInterval(draw, 50);
+  
+    // Optional: Make it responsive
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+  
+  <!--linking the js file-->
+  <script src="js.js"></script>
+  <script src="konami.js"></script>
+
+<section class="about-me">
+  <div class="about-container">
+    <div class="about-text">
+      <h2>About Me</h2>
+      <p>
+        I'm Keltjona Shpata — a passionate freelance graphic and web designer, as well as a cybersecurity student. I combine aesthetics with function to craft clean, secure, and creative digital experiences. Whether it's designing sleek interfaces or understanding digital defense, I'm all about shaping the web with style and safety.
+      </p>
+      <a href="#contact" class="about-btn">Let's Connect</a>
+    </div>
+    <div class="about-photo">
+      <img src="keltjonacyber.jpeg" alt="CybHER" />
+    </div>
+  </div>
+</section>
+
+<section class="experience-section">
+  <h2>My Journey So Far </h2>
+  <div class="experience-cards">
+
+    <div class="experience-card">
+      <h3>🎓 High School</h3>
+      <p>Completed A-levels in London, where I took Biology, Chemistry and Maths. <br>
+        (none of which prepared me to hack into a server, but at least I can diagnose its stress levels)
+      </p>
+    </div>
+
+    <div class="experience-card">
+      <h3>👩‍💻 Currently Studying</h3>
+      <p>Cyber Security student at Western Balkans University – mastering digital defense & ethical hacking.</p>
+    </div>
+
+    <div class="experience-card">
+      <h3>🖥️ Freelance Work</h3>
+      <p>Collaborated with startups and local brands as a graphic & web designer. Created engaging Instagram posts for AI HUB Albania, blending tech topics with clean visuals.</p>
+    </div>
+
+    <div class="experience-card">
+      <h3>💼 Company Projects</h3>
+      <p>Interned at Patoko as a cybersecurity engineer, where I built and secured Node.js servers, implemented best backend practices, and managed cloud infrastructure on Google Cloud, including hosting and database deployment.</p>
+    </div>
+
+    <!-- New Card for Courses -->
+    <div class="experience-card">
+      <h3>📚 Courses I've Completed</h3>
+      <p>
+        <span class="course-title">Digital Marketing</span> - Digital Roots Albania<br>
+        <span class="course-title">Certified Ethical Hacker (CEH)</span> - EC Council <em>(in progress)</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Skills Section -->
+<section class="skills-section">
+  <h2>Technical Skills</h2>
+  <div class="skills-container">
+    
+    <div class="skill-group">
+      <h3>Development</h3>
+      <div class="skills-list">
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-code"></i>
+            <span class="skill-name">HTML</span>
+            <div class="skill-badge" data-tooltip="Advanced knowledge of semantic HTML5 and accessibility practices">90%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="90"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-paint-brush"></i>
+            <span class="skill-name">CSS</span>
+            <div class="skill-badge" data-tooltip="Proficient with responsive design, animations, and modern CSS frameworks">85%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="85"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-js"></i>
+            <span class="skill-name">JavaScript</span>
+            <div class="skill-badge" data-tooltip="Experience with DOM manipulation, ES6+ features, and modern JavaScript frameworks">80%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="80"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-python"></i>
+            <span class="skill-name">Python</span>
+            <div class="skill-badge" data-tooltip="Experience with data analysis, automation, and basic cybersecurity tools">70%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="70"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-node-js"></i>
+            <span class="skill-name">Node.js</span>
+            <div class="skill-badge" data-tooltip="Building server-side applications and APIs with Express.js">65%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="65"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-github"></i>
+            <span class="skill-name">Git & GitHub</span>
+            <div class="skill-badge" data-tooltip="Version control, collaboration, and CI/CD workflows">75%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="75"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-react"></i>
+            <span class="skill-name">React</span>
+            <div class="skill-badge" data-tooltip="Building interactive UIs with components, hooks, and state management">70%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="70"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="skill-group">
+      <h3>Design</h3>
+      <div class="skills-list">
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fab fa-figma"></i>
+            <span class="skill-name">Figma</span>
+            <div class="skill-badge" data-tooltip="UI/UX design, prototyping, and collaborative design workflows">88%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="88"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-palette"></i>
+            <span class="skill-name">Graphic Design</span>
+            <div class="skill-badge" data-tooltip="Logo creation, digital art, and brand identity development">80%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="80"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-pencil-ruler"></i>
+            <span class="skill-name">UI/UX Design</span>
+            <div class="skill-badge" data-tooltip="User interface design, experience design, wireframing, and user research">75%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="75"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-object-group"></i>
+            <span class="skill-name">Canva</span>
+            <div class="skill-badge" data-tooltip="Creating professional designs, social media graphics, and marketing materials">90%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="90"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="skill-group">
+      <h3>Cyber Security</h3>
+      <div class="skills-list">
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-shield-alt"></i>
+            <span class="skill-name">Network Security</span>
+            <div class="skill-badge" data-tooltip="Foundations of network protocols, firewalls, and security architecture">75%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="75"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-bug"></i>
+            <span class="skill-name">Ethical Hacking</span>
+            <div class="skill-badge" data-tooltip="Security assessment, vulnerability scanning, and exploitation techniques">85%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="85"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-search"></i>
+            <span class="skill-name">Vulnerability Assessment</span>
+            <div class="skill-badge" data-tooltip="Identifying and analyzing security vulnerabilities in systems and applications">70%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="70"></div>
+          </div>
+        </div>
+        
+        <div class="skill-item">
+          <div class="skill-header">
+            <i class="fas fa-user-secret"></i>
+            <span class="skill-name">Penetration Testing</span>
+            <div class="skill-badge" data-tooltip="Simulating cyber attacks to evaluate security posture and identify weaknesses">68%</div>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" data-progress="68"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Projects/Portfolio Section -->
+<section class="projects-section">
+  <h2>Projects</h2>
+  <p class="section-subtitle">Some of my recent work</p>
+  
+  <div class="projects-container">
+    <!-- Project Card 1 -->
+    <div class="project-card">
+      <div class="project-image">
+        <img src="project1.jpg" alt="Project 1 Screenshot" />
+        <div class="project-links">
+          <a href="https://github.com/yourusername/project1" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+          <a href="https://project1demo.com" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+      <div class="project-info">
+        <h3>Secure Chat Application</h3>
+        <p>End-to-end encrypted messaging app with secure authentication and data protection.</p>
+        <div class="project-tags">
+          <span class="project-tag">React</span>
+          <span class="project-tag">Node.js</span>
+          <span class="project-tag">Cybersecurity</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Project Card 2 -->
+    <div class="project-card">
+      <div class="project-image">
+        <img src="project2.jpg" alt="Project 2 Screenshot" />
+        <div class="project-links">
+          <a href="https://github.com/yourusername/project2" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+          <a href="https://project2demo.com" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+      <div class="project-info">
+        <h3>Network Traffic Analyzer</h3>
+        <p>Tool for visualizing and analyzing network traffic patterns to detect security threats.</p>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">Data Visualization</span>
+          <span class="project-tag">Network Security</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Project Card 3 -->
+    <div class="project-card">
+      <div class="project-image">
+        <img src="project3.jpg" alt="Project 3 Screenshot" />
+        <div class="project-links">
+          <a href="https://github.com/yourusername/project3" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+          <a href="https://project3demo.com" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+      <div class="project-info">
+        <h3>Personal Portfolio Website</h3>
+        <p>Responsive portfolio website with interactive elements and clean design.</p>
+        <div class="project-tags">
+          <span class="project-tag">HTML/CSS</span>
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">UI/UX Design</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Location & Languages Section -->
+<section class="location-section">
+  <h2>Where I'm located</h2>
+  <div class="location-container">
+    <div class="map-wrapper">
+      <div class="globe-container">
+        <div class="globe-spinner">
+          <div class="globe">
+            <div class="albania-pin"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="map-info">
+        <h3><span class="accent-text">Based in</span> <span class="highlight">Albania</span></h3>
+        <p>Working with clients worldwide</p>
+      </div>
+    </div>
+    
+    <div class="languages-wrapper">
+      <h3>Languages I Speak</h3>
+      
+      <div class="languages-grid">
+        <div class="language-card">
+          <div class="language-code">AL</div>
+          <div class="language-details">
+            <div class="language-name">Albanian</div>
+            <div class="proficiency-dots">
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+            </div>
+            <div class="proficiency-level">Native</div>
+          </div>
+        </div>
+        
+        <div class="language-card">
+          <div class="language-code">GB</div>
+          <div class="language-details">
+            <div class="language-name">English</div>
+            <div class="proficiency-dots">
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+            </div>
+            <div class="proficiency-level">Fluent</div>
+          </div>
+        </div>
+        
+        <div class="language-card">
+          <div class="language-code">TR</div>
+          <div class="language-details">
+            <div class="language-name">Turkish</div>
+            <div class="proficiency-dots">
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="proficiency-level">Intermediate</div>
+          </div>
+        </div>
+        
+        <div class="language-card">
+          <div class="language-code">ESP</div>
+          <div class="language-details">
+            <div class="language-name">Spanish</div>
+            <div class="proficiency-dots">
+              <span class="dot active"></span>
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <div class="proficiency-level">Basic</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section with Contact Form and Social Links -->
+<footer class="footer-section" id="contact">
+    <div class="footer-container">
+      <h2>Get In Touch</h2>
+      
+      <div class="footer-content">
+        <!-- Contact Form -->
+        <div class="contact-form-container">
+          <h3>Send Me a Message</h3>
+          <form class="contact-form">
+            <div class="form-group">
+              <input type="text" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+              <input type="email" id="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+              <input type="text" id="subject" name="subject" placeholder="Subject">
+            </div>
+            <div class="form-group">
+              <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+        
+        <!-- Contact Info and Social Links -->
+        <div class="contact-info">
+          <h3>Connect With Me</h3>
+          
+          <div class="contact-details">
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>keltjona.shpata@gmail.com</span>
+            </div>
+          
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Tirana, Albania</span>
+            </div>
+          </div>
+          
+          <!-- Enhanced social links with labels -->
+          <div class="social-section">
+            <h4>Find Me Online</h4>
+            <div class="social-links-enhanced">
+              <a href="https://linkedin.com/" target="_blank" class="social-link-card">
+                <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+                <div class="social-label">LinkedIn</div>
+                <div class="social-description">Professional updates & networking</div>
+              </a>
+              <a href="https://github.com/" target="_blank" class="social-link-card">
+                <div class="social-icon"><i class="fab fa-github"></i></div>
+                <div class="social-label">GitHub</div>
+                <div class="social-description">Code projects & contributions</div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Availability indicator -->
+          <div class="availability-indicator">
+            <div class="availability-dot available"></div>
+            <div class="availability-text">Open to new projects</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 Keltjona Shpata. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fixed position Konami hint -->
+  <div class="konami-hint-fixed">
+    <strong>🎮</strong> <span class="hint-text">Try the Konami code ↑↑↓↓←→←→BA</span>
+  </div>
+
+</body>
+</html>
