@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WhoIs Lookup Tool - Keltiona Shpata</title>
+  <link rel="stylesheet" href="css.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Project-specific styles */
+    body {
+      background-color: #0a0a0a;
+      color: #f0f0f0;
+    }
+    
+    .terminal-container {
+      background-color: #0a0a0a;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: monospace;
+      color: #00ff00;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .terminal-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .terminal-button.red { background-color: #ff5f56; }
+    .terminal-button.yellow { background-color: #ffbd2e; }
+    .terminal-button.green { background-color: #27c93f; }
+
+    .terminal-title {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .terminal-content {
+      height: 300px;
+      overflow-y: auto;
+      padding-bottom: 30px;
+    }
+
+    .command-line {
+      display: flex;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+
+    .command-prompt {
+      color: #00ffff;
+      margin-right: 10px;
+    }
+
+    .code-block {
+      background-color: rgba(30,30,30,0.7);
+      padding: 20px;
+      border-radius: 5px;
+      margin: 25px 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+    }
+
+    .comment { color: #75715e; }
+    .keyword { color: #ff60bb; }
+    .string { color: #a6e22e; }
+    .function { color: #66d9ef; }
+
+    .project-header {
+      position: relative;
+      padding: 120px 0 80px;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    }
+
+    .project-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+    }
+
+    .project-title {
+      font-size: 3.5rem;
+      margin: 0;
+      background: linear-gradient(90deg, #00ffff, #99ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+
+    .project-subtitle {
+      color: #aaa;
+      font-size: 1.2rem;
+      margin-top: 15px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    .feature-card {
+      background-color: rgba(20,20,20,0.7);
+      border: 1px solid rgba(0,255,255,0.1);
+      border-radius: 8px;
+      padding: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #00ffff, transparent);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 7px 20px rgba(0,255,255,0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      color: #00ffff;
+    }
+
+    .feature-title {
+      margin-top: 0;
+      color: #f0f0f0;
+    }
+
+    .feature-description {
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 30px 0;
+    }
+
+    .tech-badge {
+      background-color: rgba(0,50,50,0.6);
+      border: 1px solid rgba(0,200,200,0.3);
+      color: #00cccc;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .back-to-portfolio {
+      display: inline-block;
+      padding: 12px 25px;
+      background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+      color: #00ffff;
+      border: 1px solid #00ffff;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-portfolio:hover {
+      background: #00ffff;
+      color: #0a0a0a;
+      box-shadow: 0 0 15px rgba(0,255,255,0.6);
+    }
+
+    /* Cybersecurity effects */
+    .digital-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .cyber-scanner {
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(to right, 
+        rgba(0,0,0,0), 
+        rgba(0,255,255,0.5),
+        rgba(0,0,0,0));
+      z-index: 100;
+      pointer-events: none;
+      animation: scanLine 4s linear infinite;
+    }
+    
+    @keyframes scanLine {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    
+    .domain-vis {
+      background-color: rgba(20,20,20,0.7);
+      border-radius: 8px;
+      padding: 25px;
+      margin: 40px 0;
+      box-shadow: 0 5px 25px rgba(0,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .domain-vis::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, transparent 0%, #0a0a0a 70%);
+      pointer-events: none;
+    }
+    
+    .domain-vis-inner {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .whois-demo {
+      background-color: rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 25px;
+      border: 1px solid rgba(0,255,255,0.2);
+      margin-top: 30px;
+    }
+    
+    .whois-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .whois-input input {
+      flex: 1;
+      padding: 12px;
+      background-color: rgba(30,30,30,0.8);
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+      font-family: monospace;
+    }
+    
+    .whois-input button {
+      padding: 0 20px;
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .whois-input button:hover {
+      background-color: #66ffff;
+      box-shadow: 0 0 10px rgba(0,255,255,0.7);
+    }
+    
+    .whois-result {
+      font-family: monospace;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,255,0.2);
+    }
+    
+    .whois-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .whois-table th {
+      text-align: left;
+      background-color: rgba(0,255,255,0.1);
+      padding: 10px;
+      font-weight: normal;
+      color: #00ffff;
+    }
+    
+    .whois-table td {
+      padding: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .whois-table tr:hover {
+      background-color: rgba(0,255,255,0.05);
+    }
+    
+    .hexagon {
+      position: absolute;
+      background: rgba(0,255,255,0.05);
+      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+      z-index: -1;
+    }
+    
+    .binary-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500"><text x="0" y="15" font-family="monospace" font-size="10" fill="rgba(0,255,255,0.03)">01001010 00110011 10110001 10011101</text></svg>');
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .dns-visual {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0;
+      position: relative;
+    }
+    
+    .dns-node {
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle, rgba(0,70,70,0.8) 0%, rgba(0,30,30,0.5) 100%);
+      border: 2px solid rgba(0,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .dns-line {
+      position: absolute;
+      background-color: rgba(0,255,255,0.2);
+      height: 2px;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      z-index: 1;
+    }
+    
+    .dns-arrow {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: rgba(0,255,255,0.2);
+      clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+      top: calc(50% - 10px);
+      animation: moveRight 3s infinite;
+    }
+    
+    @keyframes moveRight {
+      0% { left: 10%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { left: calc(90% - 20px); opacity: 0; }
+    }
+    
+    .file-tree {
+      font-family: monospace;
+      padding: 0 10px;
+    }
+    
+    .file-tree ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+    
+    .file-tree li {
+      position: relative;
+      padding: 3px 0;
+    }
+    
+    .file-tree li::before {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 12px;
+      width: 10px;
+      height: 1px;
+      background-color: #555;
+    }
+    
+    .file-tree li:last-child::after {
+      display: none;
+    }
+    
+    .file-tree li::after {
+      content: '';
+      position: absolute;
+      left: -15px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      height: 100%;
+      background-color: #555;
+    }
+    
+    .file-icon {
+      margin-right: 5px;
+      color: #888;
+    }
+    
+    .file-py {
+      color: #66d9ef;
+    }
+    
+    .file-html {
+      color: #f92672;
+    }
+    
+    .file-css {
+      color: #a6e22e;
+    }
+    
+    .file-js {
+      color: #e6db74;
+    }
+    
+    .file-md {
+      color: #ae81ff;
+    }
+    
+    .file-txt {
+      color: #ccc;
+    }
+    
+    /* Cyber globe visualization */
+    .cyber-globe {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle at 70% 30%, #00ffff 0%, rgba(0,255,255,0) 50%);
+      border: 2px solid rgba(0,255,255,0.3);
+      border-radius: 50%;
+      position: relative;
+      margin: 40px auto;
+      box-shadow: 0 0 50px rgba(0,255,255,0.3);
+    }
+    
+    .cyber-globe::before {
+      content: '';
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      top: 5px;
+      left: 5px;
+      border-radius: 50%;
+      background: 
+        linear-gradient(90deg, transparent 49.5%, rgba(0,255,255,0.5) 50%, transparent 50.5%) repeat,
+        linear-gradient(0deg, transparent 49.5%, rgba(0,255,255,0.5) 50%, transparent 50.5%) repeat;
+      background-size: 20px 20px;
+      animation: rotateGlobe 60s linear infinite;
+    }
+    
+    @keyframes rotateGlobe {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .connecting-dots {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background-image: 
+        radial-gradient(circle, rgba(0,255,255,0.15) 1px, transparent 1px),
+        radial-gradient(circle, rgba(0,255,255,0.1) 1px, transparent 1px);
+      background-size: 30px 30px, 50px 50px;
+      animation: moveBg 60s linear infinite;
+    }
+    
+    @keyframes moveBg {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 500px 500px, 1000px 1000px; }
+    }
+    
+    .response-time {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    .cyber-scatter {
+      position: fixed;
+      pointer-events: none;
+    }
+    
+    .cyber-dot {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background-color: #00ffff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: fadeOut 3s forwards;
+    }
+    
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="digital-rain" class="digital-rain"></canvas>
+  <div class="cyber-scanner"></div>
+  <div id="cyber-scatter" class="cyber-scatter"></div>
+
+  <div class="project-header">
+    <div class="binary-overlay"></div>
+    <h1 class="project-title">WhoIs Lookup Tool</h1>
+    <p class="project-subtitle">A web-based domain information retrieval system that reveals registration details, DNS records, and more</p>
+  </div>
+
+  <div class="hero">
+    <section class="about-container" style="padding: 50px 20px; max-width: 1200px; margin: 0 auto;">
+      <h2><i class="fas fa-info-circle"></i> About the Project</h2>
+      <p>
+        The WhoIs Lookup Tool is a comprehensive web application that allows users to quickly retrieve and analyze domain registration 
+        information. Built with a clean, modern interface and powered by a Python backend, this tool provides essential domain intel 
+        including registrar details, creation dates, expiration dates, name servers, and IP information.
+      </p>
+      
+      <div class="domain-vis">
+        <div class="domain-vis-inner">
+          <h3><i class="fas fa-search"></i> Interactive Demo</h3>
+          <p>Enter a domain name below to simulate a WhoIs lookup:</p>
+          
+          <div class="whois-demo">
+            <div class="whois-input">
+              <input type="text" id="domain-input" placeholder="example.com" value="example.com">
+              <button id="lookup-btn">Lookup</button>
+            </div>
+            
+            <div class="whois-result">
+              <table class="whois-table" id="result-table">
+                <tr>
+                  <th>Property</th>
+                  <th>Value</th>
+                </tr>
+                <tr>
+                  <td>Domain Name</td>
+                  <td>example.com</td>
+                </tr>
+                <tr>
+                  <td>Registrar</td>
+                  <td>ICANN-Registrar, Inc.</td>
+                </tr>
+                <tr>
+                  <td>Registration Date</td>
+                  <td>1995-08-14T04:00:00Z</td>
+                </tr>
+                <tr>
+                  <td>Expiration Date</td>
+                  <td>2023-08-13T04:00:00Z</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>clientDeleteProhibited, clientTransferProhibited, clientUpdateProhibited</td>
+                </tr>
+                <tr>
+                  <td>Name Servers</td>
+                  <td>a.iana-servers.net, b.iana-servers.net</td>
+                </tr>
+                <tr>
+                  <td>IP Address</td>
+                  <td>93.184.216.34</td>
+                </tr>
+              </table>
+            </div>
+            
+            <div class="response-time">Response time: <span id="response-time">342</span> ms</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-search"></i></div>
+          <h3 class="feature-title">Domain Lookup</h3>
+          <p class="feature-description">
+            Retrieve comprehensive WhoIs information for any domain name with a clean, user-friendly interface.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-database"></i></div>
+          <h3 class="feature-title">Data Extraction</h3>
+          <p class="feature-description">
+            Extract and parse key domain information like registrar, registration dates, and expiration dates.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-server"></i></div>
+          <h3 class="feature-title">DNS Resolution</h3>
+          <p class="feature-description">
+            Automatically resolve domain names to IP addresses and retrieve name server information.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="feature-title">Security Features</h3>
+          <p class="feature-description">
+            Input validation and sanitization to prevent injection attacks and ensure safe operation.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-desktop"></i></div>
+          <h3 class="feature-title">Responsive Design</h3>
+          <p class="feature-description">
+            Clean, modern interface that works seamlessly on desktop and mobile devices.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-code"></i></div>
+          <h3 class="feature-title">REST API</h3>
+          <p class="feature-description">
+            Backend API built with Flask that can be integrated with other tools and applications.
+          </p>
+        </div>
+      </div>
+
+      <div class="dns-visual">
+        <div class="dns-line"></div>
+        <div class="dns-arrow"></div>
+        <div class="dns-node" style="background-color: rgba(0,70,70,0.8);">Client</div>
+        <div class="dns-node" style="background-color: rgba(0,60,60,0.8);">Server</div>
+        <div class="dns-node" style="background-color: rgba(0,50,50,0.8);">WhoIs DB</div>
+        <div class="dns-node" style="background-color: rgba(0,40,40,0.8);">DNS</div>
+      </div>
+
+      <div class="cyber-globe"></div>
+      <div class="connecting-dots"></div>
+
+      <h2><i class="fas fa-code"></i> Technical Implementation</h2>
+      <div class="tech-stack">
+        <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+        <span class="tech-badge"><i class="fab fa-flask"></i> Flask</span>
+        <span class="tech-badge"><i class="fab fa-html5"></i> HTML5</span>
+        <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</span>
+        <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+        <span class="tech-badge"><i class="fas fa-database"></i> WhoIs DB</span>
+        <span class="tech-badge"><i class="fas fa-network-wired"></i> DNS</span>
+      </div>
+
+      <h3 style="width: 100%; padding-left: 0; margin-left: 0;">Backend Implementation</h3>
+      <div class="code-block">
+        <pre><span class="comment"># Flask API endpoint for WhoIs lookups</span>
+<span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, jsonify, render_template
+<span class="keyword">import</span> whois
+<span class="keyword">import</span> socket
+<span class="keyword">import</span> dns.resolver
+
+app = Flask(__name__)
+
+<span class="keyword">@app.route</span>('/')
+<span class="keyword">def</span> <span class="function">index</span>():
+    <span class="keyword">return</span> render_template('index.html')
+
+<span class="keyword">@app.route</span>('/api/whois', methods=['POST'])
+<span class="keyword">def</span> <span class="function">whois_lookup</span>():
+    <span class="comment"># Get and validate domain from request</span>
+    data = request.get_json()
+    domain = data.get('domain', '').strip().lower()
+    
+    <span class="keyword">if not</span> domain:
+        <span class="keyword">return</span> jsonify({'error': 'Domain name is required'}), 400
+    
+    <span class="keyword">try</span>:
+        <span class="comment"># Get WhoIs information</span>
+        w = whois.whois(domain)
+        
+        <span class="comment"># Get IP address</span>
+        ip_address = socket.gethostbyname(domain)
+        
+        <span class="comment"># Get name servers</span>
+        ns_records = []
+        <span class="keyword">try</span>:
+            answers = dns.resolver.resolve(domain, 'NS')
+            ns_records = [str(rdata) <span class="keyword">for</span> rdata <span class="keyword">in</span> answers]
+        <span class="keyword">except</span>:
+            ns_records = w.name_servers <span class="keyword">if</span> hasattr(w, 'name_servers') <span class="keyword">else</span> []
+        
+        <span class="comment"># Prepare response</span>
+        response = {
+            'domain': domain,
+            'registrar': w.registrar,
+            'creation_date': str(w.creation_date),
+            'expiration_date': str(w.expiration_date),
+            'status': w.status,
+            'name_servers': ns_records,
+            'ip_address': ip_address
+        }
+        
+        <span class="keyword">return</span> jsonify(response)
+        
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="keyword">return</span> jsonify({'error': str(e)}), 500
+
+<span class="keyword">if</span> __name__ == '__main__':
+    app.run(debug=True)</pre>
+      </div>
+
+      <h3 style="width: 100%; padding-left: 0; margin-left: 0;">Frontend Implementation</h3>
+      <div class="code-block">
+        <pre><span class="comment">// JavaScript for WhoIs Lookup</span>
+document.addEventListener('DOMContentLoaded', () => {
+  <span class="keyword">const</span> lookupForm = document.getElementById('lookup-form');
+  <span class="keyword">const</span> resultContainer = document.getElementById('result-container');
+  <span class="keyword">const</span> loadingIndicator = document.getElementById('loading');
+  
+  lookupForm.addEventListener('submit', <span class="keyword">async</span> (e) => {
+    e.preventDefault();
+    
+    <span class="keyword">const</span> domainInput = document.getElementById('domain-input');
+    <span class="keyword">const</span> domain = domainInput.value.trim();
+    
+    <span class="keyword">if</span> (!domain) {
+      showError('Please enter a domain name');
+      <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// Show loading</span>
+    loadingIndicator.style.display = 'block';
+    resultContainer.innerHTML = '';
+    
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> response = <span class="keyword">await</span> fetch('/api/whois', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ domain })
+      });
+      
+      <span class="keyword">const</span> data = <span class="keyword">await</span> response.json();
+      
+      <span class="keyword">if</span> (!response.ok) {
+        showError(data.error || 'Error fetching domain information');
+        <span class="keyword">return</span>;
+      }
+      
+      <span class="comment">// Display results</span>
+      displayResults(data);
+      
+    } <span class="keyword">catch</span> (error) {
+      showError('Network error or server unreachable');
+      console.error(error);
+    } <span class="keyword">finally</span> {
+      loadingIndicator.style.display = 'none';
+    }
+  });
+  
+  <span class="keyword">function</span> <span class="function">displayResults</span>(data) {
+    <span class="keyword">const</span> table = document.createElement('table');
+    table.className = 'whois-table';
+    
+    <span class="comment">// Add table headers</span>
+    <span class="keyword">const</span> thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+      </tr>
+    `;
+    table.appendChild(thead);
+    
+    <span class="comment">// Add table rows</span>
+    <span class="keyword">const</span> tbody = document.createElement('tbody');
+    
+    <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> Object.entries(data)) {
+      <span class="keyword">const</span> row = document.createElement('tr');
+      <span class="keyword">const</span> formattedKey = key.replace(/_/g, ' ').replace(
+        /\w\S*/g, 
+        txt => txt.charAt(0).toUpperCase() + txt.substr(1)
+      );
+      
+      row.innerHTML = `
+        <td>${formattedKey}</td>
+        <td>${formatValue(value)}</td>
+      `;
+      tbody.appendChild(row);
+    }
+    
+    table.appendChild(tbody);
+    resultContainer.appendChild(table);
+  }
+  
+  <span class="keyword">function</span> <span class="function">formatValue</span>(value) {
+    <span class="keyword">if</span> (Array.isArray(value)) {
+      <span class="keyword">return</span> value.join('<br>');
+    }
+    <span class="keyword">return</span> value || 'N/A';
+  }
+  
+  <span class="keyword">function</span> <span class="function">showError</span>(message) {
+    loadingIndicator.style.display = 'none';
+    resultContainer.innerHTML = `<div class="error-message">${message}</div>`;
+  }
+});</pre>
+      </div>
+
+      <h2 style="width: 100%; padding-left: 0; margin-left: 0;"><i class="fas fa-folder-open"></i> Project Structure</h2>
+      <div class="code-block file-tree">
+        <ul>
+          <li>
+            <i class="fas fa-folder file-icon"></i> whois_lookup_tool
+            <ul>
+              <li><i class="fas fa-file-code file-icon file-py"></i> app.py</li>
+              <li>
+                <i class="fas fa-folder file-icon"></i> templates
+                <ul>
+                  <li><i class="fas fa-file-code file-icon file-html"></i> index.html</li>
+                </ul>
+              </li>
+              <li>
+                <i class="fas fa-folder file-icon"></i> static
+                <ul>
+                  <li><i class="fas fa-file-code file-icon file-css"></i> style.css</li>
+                  <li><i class="fas fa-file-code file-icon file-js"></i> script.js</li>
+                </ul>
+              </li>
+              <li><i class="fas fa-file-alt file-icon file-txt"></i> requirements.txt</li>
+              <li><i class="fas fa-file-alt file-icon file-md"></i> README.md</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <h2 style="width: 100%; padding-left: 0; margin-left: 0;"><i class="fas fa-server"></i> How It Works</h2>
+      <p>
+        The WhoIs Lookup Tool uses a simple yet powerful architecture to retrieve domain information:
+      </p>
+      
+      <ol style="line-height: 1.7; margin-left: 25px;">
+        <li>User enters a domain name in the frontend interface</li>
+        <li>JavaScript sends a request to the Flask backend API</li>
+        <li>The backend validates and sanitizes the input</li>
+        <li>Python's whois module queries WHOIS databases for registration information</li>
+        <li>DNS resolution is performed to get IP addresses and name servers</li>
+        <li>All data is formatted and returned as JSON to the frontend</li>
+        <li>Results are displayed in a clean, organized format</li>
+      </ol>
+
+      <h2 style="width: 100%; padding-left: 0; margin-left: 0;"><i class="fas fa-puzzle-piece"></i> Key Features</h2>
+      <ul style="line-height: 1.7; margin-left: 25px;">
+        <li>Input validation to prevent security vulnerabilities</li>
+        <li>Efficient caching to reduce redundant queries</li>
+        <li>Error handling for non-existent domains or server errors</li>
+        <li>Responsive design for mobile and desktop use</li>
+        <li>Advanced data formatting for better readability</li>
+        <li>API endpoints for integration with other applications</li>
+      </ul>
+
+      <h2 style="width: 100%; padding-left: 0; margin-left: 0;"><i class="fas fa-graduation-cap"></i> Learning Outcomes</h2>
+      <p>
+        This project provided valuable experience in:
+      </p>
+
+      <ul style="line-height: 1.7; margin-left: 25px;">
+        <li>Building RESTful APIs with Python and Flask</li>
+        <li>Working with DNS and domain registration systems</li>
+        <li>Implementing secure input handling and validation</li>
+        <li>Creating clean, responsive user interfaces</li>
+        <li>Asynchronous JavaScript for API communication</li>
+        <li>Error handling and user feedback mechanisms</li>
+      </ul>
+
+      <div style="text-align: center; margin-top: 60px; margin-bottom: 40px;">
+        <a href="index.html" class="back-to-portfolio">
+          <i class="fas fa-chevron-left"></i> Back to Portfolio
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Digital rain effect (similar to matrix but with a cyan color theme)
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('digital-rain');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌノハヒフヘホマミムメモヤユヨラリルレロワヰヱ';
+      const fontSize = 14;
+      const columns = Math.floor(canvas.width / fontSize);
+      const drops = Array(columns).fill(1);
+      
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#00ffff';
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          
+          drops[i]++;
+        }
+      }
+      
+      setInterval(draw, 50);
+      
+      // Make it responsive
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+      
+      // Cybersecurity effects
+      const hexagons = 8;
+      for (let i = 0; i < hexagons; i++) {
+        const hexagon = document.createElement('div');
+        hexagon.classList.add('hexagon');
+        
+        // Random size between 100px and 300px
+        const size = 100 + Math.random() * 200;
+        hexagon.style.width = `${size}px`;
+        hexagon.style.height = `${size}px`;
+        
+        // Random position
+        hexagon.style.left = `${Math.random() * 100}vw`;
+        hexagon.style.top = `${Math.random() * 100}vh`;
+        
+        document.body.appendChild(hexagon);
+      }
+      
+      // Cyber scatter effect
+      document.addEventListener('mousemove', function(event) {
+        if (Math.random() > 0.9) {
+          createCyberDot(event.clientX, event.clientY);
+        }
+      });
+      
+      function createCyberDot(x, y) {
+        const dot = document.createElement('div');
+        dot.classList.add('cyber-dot');
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        document.getElementById('cyber-scatter').appendChild(dot);
+        
+        // Remove the dot after animation completes
+        setTimeout(() => {
+          dot.remove();
+        }, 3000);
+      }
+      
+      // Setup WhoIs lookup demo interaction
+      const lookupBtn = document.getElementById('lookup-btn');
+      const domainInput = document.getElementById('domain-input');
+      const resultTable = document.getElementById('result-table');
+      const responseTime = document.getElementById('response-time');
+      
+      lookupBtn.addEventListener('click', function() {
+        // Show loading effect
+        lookupBtn.disabled = true;
+        lookupBtn.textContent = 'Searching...';
+        
+        // Simulated data lookup with random response time
+        const simulatedResponseTime = 300 + Math.floor(Math.random() * 700);
+        
+        setTimeout(() => {
+          // Get the entered domain or default to example.com
+          const domain = domainInput.value.trim() || 'example.com';
+          
+          // Update the table with "real-looking" data for the domain
+          updateResults(domain);
+          
+          // Update response time
+          responseTime.textContent = simulatedResponseTime;
+          
+          // Reset button
+          lookupBtn.disabled = false;
+          lookupBtn.textContent = 'Lookup';
+          
+          // Create a bunch of cyber dots for effect
+          for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+              const x = Math.random() * window.innerWidth;
+              const y = Math.random() * window.innerHeight;
+              createCyberDot(x, y);
+            }, i * 100);
+          }
+        }, simulatedResponseTime);
+      });
+      
+      function updateResults(domain) {
+        // Sample data based on domain name
+        const tld = domain.split('.').pop();
+        
+        // Create updated results
+        const registrars = {
+          'com': 'ICANN-Registrar, Inc.',
+          'org': 'Public Interest Registry',
+          'net': 'Network Solutions, LLC',
+          'io': 'Afilias Ltd.',
+          'dev': 'Google Domains',
+          'ai': 'Anguilla Network Information Center'
+        };
+        
+        const registrar = registrars[tld] || 'Domain Registrar, Inc.';
+        const creationYear = 2010 + Math.floor(Math.random() * 10);
+        const expirationYear = 2023 + Math.floor(Math.random() * 5);
+        
+        const nameServers = [
+          `ns1.${domain}`,
+          `ns2.${domain}`,
+          tld === 'com' ? 'pdns1.ultradns.net' : `dns.${tld}-servers.net`
+        ];
+        
+        const randomOctet = () => Math.floor(Math.random() * 255);
+        const ipAddress = `${randomOctet()}.${randomOctet()}.${randomOctet()}.${randomOctet()}`;
+        
+        const statuses = [
+          'clientTransferProhibited',
+          'clientUpdateProhibited',
+          'clientDeleteProhibited',
+          'serverTransferProhibited'
+        ];
+        
+        // Update the table
+        resultTable.innerHTML = `
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>Domain Name</td>
+            <td>${domain}</td>
+          </tr>
+          <tr>
+            <td>Registrar</td>
+            <td>${registrar}</td>
+          </tr>
+          <tr>
+            <td>Registration Date</td>
+            <td>${creationYear}-${(Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0')}-${(Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0')}</td>
+          </tr>
+          <tr>
+            <td>Expiration Date</td>
+            <td>${expirationYear}-${(Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0')}-${(Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0')}</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>${statuses.slice(0, 1 + Math.floor(Math.random() * 3)).join(', ')}</td>
+          </tr>
+          <tr>
+            <td>Name Servers</td>
+            <td>${nameServers.join('<br>')}</td>
+          </tr>
+          <tr>
+            <td>IP Address</td>
+            <td>${ipAddress}</td>
+          </tr>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

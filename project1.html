@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SimplePortScanner - Keltiona Shpata</title>
+  <link rel="stylesheet" href="css.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* Project-specific styles */
+    .terminal-container {
+      background-color: #0a0a0a;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: monospace;
+      color: #00ff00;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .terminal-button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .terminal-button.red { background-color: #ff5f56; }
+    .terminal-button.yellow { background-color: #ffbd2e; }
+    .terminal-button.green { background-color: #27c93f; }
+
+    .terminal-title {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .terminal-content {
+      height: 300px;
+      overflow-y: auto;
+      padding-bottom: 30px;
+    }
+
+    .command-line {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    .command-prompt {
+      color: #ff007f;
+      margin-right: 10px;
+    }
+
+    .code-block {
+      background-color: rgba(30,30,30,0.7);
+      padding: 20px;
+      border-radius: 5px;
+      margin: 25px 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+    }
+
+    .comment { color: #75715e; }
+    .keyword { color: #f92672; }
+    .string { color: #a6e22e; }
+    .function { color: #66d9ef; }
+
+    .interactive-demo {
+      background-color: rgba(10,10,10,0.8);
+      padding: 30px;
+      border-radius: 10px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .interactive-demo::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0,255,0,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .port {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: rgba(30,30,30,0.7);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #777;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .port.scanning {
+      background-color: rgba(255,180,0,0.3);
+      color: #ffb400;
+      box-shadow: 0 0 5px rgba(255,180,0,0.5);
+    }
+
+    .port.open {
+      background-color: rgba(0,255,0,0.2);
+      color: #00ff00;
+      box-shadow: 0 0 8px rgba(0,255,0,0.5);
+    }
+
+    .port.closed {
+      background-color: rgba(255,0,0,0.2);
+      color: #ff5555;
+    }
+
+    .port-divider {
+      grid-column: 1 / -1;
+      height: 2px;
+      background-color: rgba(100,100,100,0.2);
+      margin: 10px 0;
+    }
+
+    .project-header {
+      position: relative;
+      padding: 120px 0 80px;
+      text-align: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    }
+
+    .project-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="0" y="30" font-family="monospace" font-size="10" fill="rgba(0,255,0,0.1)">01001</text><text x="0" y="50" font-family="monospace" font-size="10" fill="rgba(0,255,0,0.1)">10110</text><text x="0" y="70" font-family="monospace" font-size="10" fill="rgba(0,255,0,0.1)">01010</text></svg>');
+      opacity: 0.2;
+    }
+
+    .project-title {
+      font-size: 3.5rem;
+      margin: 0;
+      background: linear-gradient(90deg, #00ff00, #99ff99);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .project-subtitle {
+      color: #aaa;
+      font-size: 1.2rem;
+      margin-top: 15px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    .feature-card {
+      background-color: rgba(20,20,20,0.7);
+      border: 1px solid rgba(0,255,0,0.1);
+      border-radius: 8px;
+      padding: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #00ff00, transparent);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 7px 20px rgba(0,255,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      color: #00ff00;
+    }
+
+    .feature-title {
+      margin-top: 0;
+      color: #f0f0f0;
+    }
+
+    .feature-description {
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 30px 0;
+    }
+
+    .tech-badge {
+      background-color: rgba(0,50,0,0.6);
+      border: 1px solid rgba(0,200,0,0.3);
+      color: #00cc00;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .digital-circuit {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.1;
+    }
+
+    .circuit-line {
+      position: absolute;
+      background-color: #00ff00;
+      transform-origin: 0 0;
+      opacity: 0.5;
+    }
+
+    .scanning-pulse {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #00ff00, transparent);
+      animation: scanPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes scanPulse {
+      0% { top: 0; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .back-to-portfolio {
+      display: inline-block;
+      padding: 12px 25px;
+      background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-portfolio:hover {
+      background: #00ff00;
+      color: #0a0a0a;
+      box-shadow: 0 0 15px rgba(0,255,0,0.6);
+    }
+
+    .hidden-packets {
+      position: fixed;
+      height: 8px;
+      width: 8px;
+      background: rgba(0,255,0,0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      box-shadow: 0 0 8px rgba(0,255,0,0.8);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="project-header">
+    <div class="scanning-pulse"></div>
+    <div class="digital-circuit"></div>
+    <h1 class="project-title">SimplePortScanner</h1>
+    <p class="project-subtitle">A high-performance, cross-platform command-line tool for scanning network ports with advanced detection capabilities</p>
+  </div>
+
+  <div class="hero">
+    <div class="interactive-demo">
+      <h2><i class="fas fa-network-wired"></i> Interactive Port Scanner Demo</h2>
+      <p>Enter a target IP address or domain name and click "Scan" to simulate port scanning:</p>
+      
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-button red"></div>
+          <div class="terminal-button yellow"></div>
+          <div class="terminal-button green"></div>
+          <div class="terminal-title">SimplePortScanner</div>
+        </div>
+        <div class="terminal-content" id="terminal">
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">./simpleportscanner --target 192.168.1.1 --ports 20-30</span>
+          </div>
+          <div id="terminal-output">
+            <p>[*] Starting SimplePortScanner v1.0.0</p>
+            <p>[*] Target: 192.168.1.1</p>
+            <p>[*] Port range: 20-30</p>
+            <p>[*] Scan started at: <span id="scan-time"></span></p>
+            <p>[*] Scanning in progress...</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="text" id="target-input" placeholder="Target (e.g., 192.168.1.1)" style="flex: 1; padding: 12px; border-radius: 4px; border: 1px solid #333; background: rgba(10,10,10,0.8); color: #eee;">
+        <input type="text" id="port-input" placeholder="Ports (e.g., 20-100 or 22,80,443)" style="flex: 1; padding: 12px; border-radius: 4px; border: 1px solid #333; background: rgba(10,10,10,0.8); color: #eee;">
+        <button id="scan-btn" style="padding: 12px 25px; background: #00aa00; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Scan Ports</button>
+      </div>
+
+      <h3>Port Visualization</h3>
+      <div class="port-grid" id="port-grid">
+        <!-- Ports will be added here dynamically -->
+      </div>
+    </div>
+
+    <section class="about-container" style="padding: 50px 20px; max-width: 1200px; margin: 0 auto;">
+      <h2><i class="fas fa-info-circle"></i> About the Project</h2>
+      <p>
+        SimplePortScanner is a powerful and efficient network port scanning tool designed for cybersecurity professionals, 
+        network administrators, and security enthusiasts. Built with performance and usability in mind, it allows you to quickly 
+        identify open ports on target systems, helping with network mapping, security assessments, and vulnerability scanning.
+      </p>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3 class="feature-title">High Performance</h3>
+          <p class="feature-description">
+            Written in Go for maximum performance, SimplePortScanner uses concurrent scanning to rapidly check multiple ports simultaneously.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-universal-access"></i></div>
+          <h3 class="feature-title">Cross-Platform</h3>
+          <p class="feature-description">
+            Works on Windows, macOS, and Linux with consistent behavior and performance across all platforms.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-fingerprint"></i></div>
+          <h3 class="feature-title">Service Detection</h3>
+          <p class="feature-description">
+            Performs banner grabbing to identify services running on open ports, helping to understand what's exposed.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-sliders-h"></i></div>
+          <h3 class="feature-title">Flexible Configuration</h3>
+          <p class="feature-description">
+            Specify target IPs or domain names, define custom port ranges or specific ports to scan.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-terminal"></i></div>
+          <h3 class="feature-title">CLI & Web Interface</h3>
+          <p class="feature-description">
+            Use as a command-line tool or through the optional web-based interface for visual results.
+          </p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 class="feature-title">Security-Focused</h3>
+          <p class="feature-description">
+            Designed with responsible security testing in mind, respecting target systems and networks.
+          </p>
+        </div>
+      </div>
+
+      <h2><i class="fas fa-code"></i> Technical Details</h2>
+      <div class="tech-stack">
+        <span class="tech-badge"><i class="fab fa-golang"></i> Go</span>
+        <span class="tech-badge"><i class="fas fa-network-wired"></i> Raw Sockets</span>
+        <span class="tech-badge"><i class="fas fa-cogs"></i> Concurrent Processing</span>
+        <span class="tech-badge"><i class="fab fa-html5"></i> HTML</span>
+        <span class="tech-badge"><i class="fab fa-css3-alt"></i> CSS</span>
+        <span class="tech-badge"><i class="fab fa-js"></i> JavaScript</span>
+        <span class="tech-badge"><i class="fab fa-node-js"></i> Node.js Backend</span>
+      </div>
+
+      <div class="code-block">
+        <pre><span class="comment">// Main port scanner function in Go</span>
+<span class="keyword">func</span> <span class="function">ScanPort</span>(protocol, hostname <span class="keyword">string</span>, port <span class="keyword">int</span>, timeout <span class="keyword">time.Duration</span>) <span class="keyword">bool</span> {
+    address := hostname + <span class="string">":" + strconv.Itoa(port)</span>
+    conn, err := net.DialTimeout(protocol, address, timeout)
+    
+    <span class="keyword">if</span> err != <span class="keyword">nil</span> {
+        <span class="keyword">return false</span>
+    }
+    <span class="keyword">defer</span> conn.Close()
+    <span class="keyword">return true</span>
+}</pre>
+      </div>
+
+      <h2><i class="fas fa-columns"></i> Project Structure</h2>
+      <p>
+        The project follows a clean, modular structure separating core scanning functionality, CLI interface, and web UI components:
+      </p>
+      
+      <div class="code-block">
+<pre>SimplePortScanner/
+├── cmd/
+│   └── simpleportscanner/
+│       └── main.go           <span class="comment">// Entry point for CLI</span>
+├── internal/
+│   ├── scanner/              <span class="comment">// Core scanning logic</span>
+│   │   ├── scanner.go
+│   │   └── banner.go
+│   ├── result/               <span class="comment">// Result handling</span>
+│   │   └── result.go
+│   └── utils/                <span class="comment">// Utilities</span>
+│       └── utils.go
+├── web/                      <span class="comment">// Web interface</span>
+│   ├── server.go             <span class="comment">// Backend server</span>
+│   └── frontend/             <span class="comment">// Frontend files</span>
+│       ├── index.html
+│       ├── style.css
+│       └── script.js
+└── README.md                 <span class="comment">// Documentation</span></pre>
+      </div>
+
+      <h2><i class="fas fa-terminal"></i> Usage Examples</h2>
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-button red"></div>
+          <div class="terminal-button yellow"></div>
+          <div class="terminal-button green"></div>
+          <div class="terminal-title">Command Examples</div>
+        </div>
+        <div class="terminal-content">
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">./simpleportscanner --target example.com --ports 80,443</span>
+          </div>
+          <p>Scan specific ports 80 and 443 on example.com</p>
+          
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">./simpleportscanner --target 192.168.1.1 --ports 1-1000</span>
+          </div>
+          <p>Scan ports 1-1000 on IP address 192.168.1.1</p>
+          
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">./simpleportscanner --target scanme.nmap.org --ports common --grab-banners</span>
+          </div>
+          <p>Scan common ports on scanme.nmap.org and attempt banner grabbing</p>
+        </div>
+      </div>
+
+      <h2><i class="fas fa-download"></i> Get the Code</h2>
+      <p>The project is available on GitHub. Clone and start using it with the following commands:</p>
+
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-button red"></div>
+          <div class="terminal-button yellow"></div>
+          <div class="terminal-button green"></div>
+          <div class="terminal-title">Installation</div>
+        </div>
+        <div class="terminal-content">
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">git clone https://github.com/keltjonashpata/SimplePortScanner.git</span>
+          </div>
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">cd SimplePortScanner</span>
+          </div>
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">go build ./cmd/simpleportscanner</span>
+          </div>
+          <div class="command-line">
+            <span class="command-prompt">user@simplescan:~$</span>
+            <span class="command">./simpleportscanner --help</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 60px; margin-bottom: 40px;">
+        <a href="index.html" class="back-to-portfolio">
+          <i class="fas fa-chevron-left"></i> Back to Portfolio
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Matrix background effect - similar to main site
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+  
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  
+    const chars = "01";
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+  
+    function draw() {
+      ctx.fillStyle = "rgba(0, 10, 0, 0.05)"; // Transparent green fade
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+      ctx.fillStyle = "#00ff00"; // Green text
+      ctx.font = `${fontSize}px monospace`;
+  
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+  
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+  
+        drops[i]++;
+      }
+    }
+  
+    setInterval(draw, 50);
+  
+    // Make it responsive
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Digital circuit background effect
+    document.addEventListener('DOMContentLoaded', function() {
+      const circuit = document.querySelector('.digital-circuit');
+      const numberOfLines = 20;
+      
+      for (let i = 0; i < numberOfLines; i++) {
+        const line = document.createElement('div');
+        line.classList.add('circuit-line');
+        
+        // Random positioning and sizing
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        const length = 20 + Math.random() * 60;
+        const thickness = 1 + Math.random() * 2;
+        const isHorizontal = Math.random() > 0.5;
+        
+        line.style.left = `${startX}%`;
+        line.style.top = `${startY}%`;
+        
+        if (isHorizontal) {
+          line.style.height = `${thickness}px`;
+          line.style.width = `${length}%`;
+        } else {
+          line.style.width = `${thickness}px`;
+          line.style.height = `${length}%`;
+        }
+        
+        circuit.appendChild(line);
+      }
+      
+      // Add port scanning demo functionality
+      document.getElementById('scan-time').textContent = new Date().toLocaleString();
+      
+      const portGrid = document.getElementById('port-grid');
+      const scanBtn = document.getElementById('scan-btn');
+      const targetInput = document.getElementById('target-input');
+      const portInput = document.getElementById('port-input');
+      const terminalOutput = document.getElementById('terminal-output');
+      
+      // Initialize some default ports for visualization
+      for (let i = 20; i <= 30; i++) {
+        const port = document.createElement('div');
+        port.classList.add('port');
+        port.textContent = i;
+        port.id = `port-${i}`;
+        portGrid.appendChild(port);
+      }
+      
+      // Port scanning animation
+      scanBtn.addEventListener('click', function() {
+        const target = targetInput.value || '192.168.1.1';
+        let ports = [];
+        
+        // Parse port input
+        if (portInput.value.includes('-')) {
+          const [start, end] = portInput.value.split('-').map(p => parseInt(p.trim()));
+          for (let i = start; i <= end; i++) {
+            ports.push(i);
+          }
+        } else if (portInput.value.includes(',')) {
+          ports = portInput.value.split(',').map(p => parseInt(p.trim()));
+        } else if (portInput.value.trim()) {
+          ports = [parseInt(portInput.value.trim())];
+        } else {
+          // Default ports
+          ports = Array.from({length: 11}, (_, i) => i + 20);
+        }
+        
+        // Clear previous grid and create new one
+        portGrid.innerHTML = '';
+        ports.forEach(port => {
+          const portEl = document.createElement('div');
+          portEl.classList.add('port');
+          portEl.textContent = port;
+          portEl.id = `port-${port}`;
+          portGrid.appendChild(portEl);
+        });
+        
+        // Update terminal output
+        terminalOutput.innerHTML = `
+          <p>[*] Starting SimplePortScanner v1.0.0</p>
+          <p>[*] Target: ${target}</p>
+          <p>[*] Port range: ${ports[0]}-${ports[ports.length-1]}</p>
+          <p>[*] Scan started at: ${new Date().toLocaleString()}</p>
+          <p>[*] Scanning in progress...</p>
+        `;
+        
+        // Animate the port scanning process
+        let currentIndex = 0;
+        const scanInterval = setInterval(() => {
+          if (currentIndex >= ports.length) {
+            clearInterval(scanInterval);
+            terminalOutput.innerHTML += `<p>[*] Scan completed at: ${new Date().toLocaleString()}</p>`;
+            return;
+          }
+          
+          const portElement = document.getElementById(`port-${ports[currentIndex]}`);
+          if (portElement) {
+            portElement.classList.add('scanning');
+            
+            // Simulate scan result
+            setTimeout(() => {
+              const isOpen = Math.random() > 0.7; // 30% chance of port being open
+              if (isOpen) {
+                portElement.classList.remove('scanning');
+                portElement.classList.add('open');
+                
+                // Determine random service for open port
+                const services = {
+                  21: 'FTP',
+                  22: 'SSH',
+                  23: 'Telnet',
+                  25: 'SMTP',
+                  80: 'HTTP',
+                  443: 'HTTPS',
+                  3306: 'MySQL'
+                };
+                
+                const service = services[ports[currentIndex]] || 'Unknown';
+                terminalOutput.innerHTML += `<p style="color: #00ff00;">[+] Port ${ports[currentIndex]} is OPEN (${service})</p>`;
+                
+                // Create packet animation
+                createPacketAnimation(portElement);
+              } else {
+                portElement.classList.remove('scanning');
+                portElement.classList.add('closed');
+                terminalOutput.innerHTML += `<p style="color: #777;">[!] Port ${ports[currentIndex]} is closed</p>`;
+              }
+            }, 500);
+          }
+          
+          currentIndex++;
+        }, 300);
+      });
+      
+      // Create packet animation effect
+      function createPacketAnimation(sourceElement) {
+        const packet = document.createElement('div');
+        packet.classList.add('hidden-packets');
+        document.body.appendChild(packet);
+        
+        const rect = sourceElement.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+        
+        // Position at the source
+        packet.style.left = `${startX}px`;
+        packet.style.top = `${startY}px`;
+        
+        // Random destination
+        const destX = Math.random() * window.innerWidth;
+        const destY = Math.random() * window.innerHeight;
+        
+        // Animation
+        packet.style.transition = `all ${Math.random() * 2 + 1}s ease-out`;
+        packet.style.opacity = '1';
+        
+        setTimeout(() => {
+          packet.style.opacity = '1';
+          packet.style.left = `${destX}px`;
+          packet.style.top = `${destY}px`;
+          
+          setTimeout(() => {
+            packet.style.opacity = '0';
+            setTimeout(() => {
+              packet.remove();
+            }, 1000);
+          }, 1000);
+        }, 100);
+      }
+    });
+  </script>
+</body>
+</html>
