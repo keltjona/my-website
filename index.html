@@ -7,6 +7,38 @@
   <link rel="stylesheet" href="css.css" />
   <!-- Add Font Awesome for social icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Added mobile-specific styles -->
+  <style>
+    @media (max-width: 768px) {
+      .contact-form {
+        padding: 0 10px;
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+      
+      .form-group {
+        width: 100% !important;
+        max-width: 100%;
+      }
+      
+      .contact-form input,
+      .contact-form textarea,
+      .submit-btn {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      
+      .submit-btn {
+        margin: 15px auto 0;
+      }
+      
+      .contact-form-container {
+        padding: 15px !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
@@ -395,13 +427,13 @@
       <div class="globe-container">
         <div class="globe-spinner">
           <div class="globe">
-            <div class="albania-pin"></div>
+            <div class="europe-pin" style="position: absolute; width: 12px; height: 12px; background-color: #ff5f56; border-radius: 50%; top: 44%; left: 50%; box-shadow: 0 0 8px rgba(255,95,86,0.8); z-index: 100;"></div>
           </div>
         </div>
       </div>
       
       <div class="map-info">
-        <h3><span class="accent-text">Based in</span> <span class="highlight">Albania</span></h3>
+        <h3><span class="accent-text">Based in</span> <span class="highlight">Europe</span></h3>
         <p>Working with clients worldwide</p>
       </div>
     </div>
@@ -436,7 +468,7 @@
               <span class="dot active"></span>
               <span class="dot active"></span>
             </div>
-            <div class="proficiency-level">Fluent</div>
+            <div class="proficiency-level">Bilingual</div>
           </div>
         </div>
         
@@ -483,7 +515,7 @@
         <!-- Contact Form -->
         <div class="contact-form-container">
           <h3>Send Me a Message</h3>
-          <form class="contact-form" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+          <form id="contact-form" class="contact-form" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div class="form-group" style="width: 100%;">
               <input type="text" id="name" name="name" placeholder="Your Name" required>
             </div>
@@ -498,6 +530,13 @@
             </div>
             <button type="submit" class="submit-btn">Send Message</button>
           </form>
+          
+          <!-- Success Message Popup -->
+          <div id="success-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0, 200, 0, 0.9); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); z-index: 1000; text-align: center;">
+            <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <p style="margin: 0;">Message sent successfully!</p>
+            <button id="close-popup" style="background: white; color: #333; border: none; padding: 8px 16px; margin-top: 15px; border-radius: 4px; cursor: pointer;">Close</button>
+          </div>
         </div>
         
         <!-- Contact Info and Social Links -->
@@ -510,11 +549,6 @@
               <span>keltjona.shpata@gmail.com</span>
             </div>
           
-            <div class="contact-item">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>Tirana, Albania</span>
-            </div>
-          </div>
           
           <!-- Enhanced social links with labels -->
           <div class="social-section">
@@ -551,6 +585,34 @@
   <div class="konami-hint-fixed">
     <strong>🎮</strong> <span class="hint-text">Try the Konami code ↑↑↓↓←→←→BA</span>
   </div>
+
+  <script>
+    // Form submission handler
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      // Prevent the form from submitting normally
+      event.preventDefault();
+      
+      // Get form data (in a real application, you would send this to a server)
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      
+      // Simulate form submission (in a real app, you'd make an API call here)
+      console.log("Form submitted with:", { name, email, subject, message });
+      
+      // Show success popup
+      document.getElementById('success-popup').style.display = 'block';
+      
+      // Reset form
+      this.reset();
+    });
+    
+    // Close popup button
+    document.getElementById('close-popup').addEventListener('click', function() {
+      document.getElementById('success-popup').style.display = 'none';
+    });
+  </script>
 
 </body>
 </html>
